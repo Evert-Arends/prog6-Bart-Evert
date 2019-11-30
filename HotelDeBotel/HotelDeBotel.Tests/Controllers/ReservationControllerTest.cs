@@ -28,5 +28,31 @@ namespace HotelDeBotel.Tests.Controllers
             Assert.IsTrue(result.ViewBag.Repo is IDiscountRepository);
         }
 
+        [TestMethod]
+        public void Details()
+        {
+            //Arrange
+            ReservationController controller = new ReservationController(new DummyReservationRepository(), new DummyRoomRepository(), new DummyDiscountRepository());
+
+            //Act
+            ViewResult result = controller.Details(0) as ViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.ViewBag.Repo is IDiscountRepository);
+        }
+
+        [TestMethod]
+        public void Create()
+        {
+            //Arrange
+            ReservationController controller = new ReservationController(new DummyReservationRepository(), new DummyRoomRepository(), new DummyDiscountRepository());
+
+            //Act
+            ViewResult result = controller.Create(0) as ViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
     }
 }
