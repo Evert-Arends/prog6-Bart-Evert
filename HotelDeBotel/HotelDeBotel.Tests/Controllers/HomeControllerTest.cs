@@ -36,7 +36,7 @@ namespace HotelDeBotel.Tests.Controllers
             ViewResult result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.AreEqual("2019 PROG6 Assessment assignment made by Evert Arends and Bart Koevoets", result.ViewBag.Message);
         }
 
         [TestMethod]
