@@ -44,13 +44,14 @@ namespace HotelDeBotel.Models.Repositories
 
         public RoomVM GetById(int id)
         {
-            return new RoomVM(context.Rooms.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id));
+            var room = new RoomVM(context.Rooms.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id));
+            return room;
         }
 
         public RoomVM Update(RoomVM item)
         {
             var result = GetById(item.Id);
-            context.Entry(result).CurrentValues.SetValues(item);
+            context.Entry(result.ToModel()).CurrentValues.SetValues(item.ToModel());
             context.SaveChanges();
             return result;
         }
