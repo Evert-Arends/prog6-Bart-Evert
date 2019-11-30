@@ -82,5 +82,19 @@ namespace HotelDeBotel.Models.Repositories
             context.SaveChanges();
             return result;
         }
+
+        public bool CheckDate(ReservationVM reservation)
+        {
+            var listOfReservations = GetAllByRoomId(reservation.Room.Id);
+            for (int x = 0; x < listOfReservations.Count; x++)
+            {
+                var res = listOfReservations[x];
+                if (res.Date == reservation.Date && res.Id != reservation.Id)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

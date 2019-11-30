@@ -51,16 +51,11 @@ namespace HotelDeBotel.Controllers
             reservation.AmountOfGuests = int.Parse(Request.Form.Get("AmountOfGuests"));
             reservation.Date = DateTime.Parse(Request.Form.Get("Date"));
 
-            var listOfReservations = _reservationRepository.GetAllByRoomId(reservation.Room.Id);
-            for (int x = 0; x < listOfReservations.Count; x++)
+            if (!_reservationRepository.CheckDate(reservation))
             {
-                var res = listOfReservations[x];
-                if (res.Date == reservation.Date && res.Id != reservation.Id)
-                {
-                    reservation.Step = 1;
-                    ViewBag.ErrorMsgDate = "This room already has a booking on this date, please choose another";
-                    return View("Create", reservation);
-                }
+                reservation.Step = 1;
+                ViewBag.ErrorMsgDate = "This room already has a booking on this date, please choose another";
+                return View("Create", reservation);
             }
 
             if(reservation.AmountOfGuests > reservation.Room.Size)
@@ -110,6 +105,13 @@ namespace HotelDeBotel.Controllers
         [HttpPost]
         public ActionResult StepFour()
         {
+            var reservation = _reservationRepository.GetTemp();
+            if (!_reservationRepository.CheckDate(reservation))
+            {
+                reservation.Step = 1;
+                ViewBag.ErrorMsgDate = "Another guest has booked this room on this date, please choose a different date";
+                return View("Create", reservation);
+            }
             _reservationRepository.Save();
             return RedirectToAction("Index", "Home");
         }

@@ -15,6 +15,7 @@ namespace HotelDeBotel.Models.Repositories
         ObservableCollection<ReservationVM> GetAll();
         ObservableCollection<ReservationVM> GetAllByRoomId(int roomId);
         ReservationVM Create(ReservationVM item);
+        bool CheckDate(ReservationVM reservation);
         ReservationVM Update(ReservationVM item);
         bool Delete(ReservationVM item);
         bool Save();
