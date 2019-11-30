@@ -1,0 +1,40 @@
+﻿@using System.Collections.ObjectModel
+@model ObservableCollection<HotelDeBotel.Models.Viewmodels.RoomVM>
+@{
+    ViewBag.Title = "Home Page";
+}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<div class="jumbotron">
+    <h1>Hotel De Botel</h1>
+    <p class="lead">A night at this hotel is OK</p>
+    <p><a href="/Room/Create" class="btn btn-primary btn-lg">Add a new room!</a></p>
+</div>
+
+
+<div class="container-fluid cards-row">
+    <div class="container">
+        <div class="row col-md-12">
+
+            @foreach (var room in Model)
+            {
+                <div class="col-sm-6 col-md-3"> 
+                    <div class="thumbnail">
+                        <img src="@room.Image" alt="@room.Name">
+                        <div class="caption">
+                            <h3>&euro;@room.Price </h3>
+                            <p class="card-description"><strong>@room.Name</strong> <br />Space: @room.Size</p>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <form action="/Reservation/Create/@room.Id" method="get">
+                                        <input type="submit" value="Book this room!" class="btn btn-primary" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

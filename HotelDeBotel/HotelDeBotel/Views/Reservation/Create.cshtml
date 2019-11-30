@@ -1,0 +1,210 @@
+﻿@using HotelDeBotel.Models.Viewmodels
+@model ReservationVM
+
+@{
+    ViewBag.Title = "Book a room: Step " + @Model.Step;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Book your room</h2>
+
+<div class="multistep">
+    <ul>
+        <li class="@(Model.Step == 1 ? "active" : "")"><b>Step 1</b></br>Amount of guests</li>
+        <li class="@(Model.Step == 2 ? "active" : "")"><b>Step 2</b></br>Contact info</li>
+        <li class="@(Model.Step == 3 ? "active" : "")"><b>Step 3</b></br>Calculate discount</li>
+        <li class="@(Model.Step == 4 ? "active" : "")"><b>Step 4</b></br>Confirm booking</li>
+    </ul>
+</div>
+
+<hr />
+
+<div class="float-left col-md-6">
+    @switch (Model.Step)
+    {
+        case 1:
+            using (Html.BeginForm("StepOne", "Reservation", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <h2>Choose date and number of guests</h2>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12 mb-3">
+                            <input type="date" id="Date" name="Date" class="form-control" data-val="true" data-val-date="The field Date must be a valid date (dd/mm/yy)" data-val-required="The Date field is required" value="@Model.Date.ToShortDateString()" />
+                            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                            <span class="text-danger">@ViewBag.ErrorMsgDate</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Amount of guests</label>
+                        <div class="col-md-12 mb-3">
+                            @Html.EditorFor(model => model.AmountOfGuests, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.AmountOfGuests, "", new { @class = "text-danger" })
+                            <span class="text-danger">@ViewBag.ErrorMsgSize</span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" value="@Model.Id" name="ReservationId" />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Next Step" class="btn btn-success" />
+                        </div>
+                    </div>
+
+                </div>
+            }
+            break;
+
+        case 2:
+            using (Html.BeginForm("StepTwo", "Reservation", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <h2>Enter information about guests</h2>
+
+                    @{int i = 0;}
+                    @foreach (GuestVM guest in Model.Guests)
+                    {
+                        <h4>Guest @(i + 1)</h4>
+                        <div class="form-group">
+                            @Html.LabelFor(model => guest.Name, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12 mb-3">
+                                <input type="text" name="guestname-@i" id="guestname-@i" required class="form-control" value="@guest.Name" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="guestname-@i" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => guest.Address, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12 mb-3">
+                                <input type="text" name="guestaddress-@i" id="guestaddress-@i" required class="form-control" value="@guest.Address" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="guestaddress-@i" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => guest.Email, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12 mb-3">
+                                <input type="email" name="guestemail-@i" id="guestemail-@i" class="form-control" value="@guest.Email" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="guestemail-@i" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+
+                        { i++; }
+                    }
+
+                    <input type="hidden" value="@Model.Id" name="ReservationId" />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Next Step" class="btn btn-success" />
+                        </div>
+                    </div>
+
+                </div>
+            }
+            break;
+        case 3:
+            using (Html.BeginForm("StepThree", "Reservation", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <h4><label class="control-label">Your discount: @Model.DiscountPercentage</label></h4>
+                        <div class="col-md-12 mb-3">
+                            New price: &euro;@Model.Room.Price - @Model.DiscountPercentage = <b>&euro;@Model.FinalPrice</b>
+                        </div>
+                    </div>
+
+                    <input type="hidden" value="@Model.Id" name="ReservationId" />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Next Step" class="btn btn-success" />
+                        </div>
+                    </div>
+
+                </div>
+            }
+            break;
+        case 4:
+            using (Html.BeginForm("StepFour", "Reservation", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <h2>Verify info</h2>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12 mb-3">
+                            <input type="text" id="Date" name="Date" class="form-control" value="@Model.Date.ToShortDateString()" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Amount of guests</label>
+                        <div class="col-md-12 mb-3">
+                            <input type="text" id="AmountOfGuests" name="AmountOfGuests" class="form-control" value="@Model.AmountOfGuests" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Guests information</h3>
+                        <ul>
+                            @foreach (GuestVM guest in Model.Guests)
+                            {
+                                <li>@guest.Name</li>
+                                <li class="nostyle">
+                                    <ul>
+                                        <li>Address: @guest.Address</li>
+                                        <li>Email: @guest.Email</li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <h3>Discount: @Model.DiscountPercentage</h3>
+                        Price: &euro;@Model.Room.Price - @Model.DiscountPercentage = <b>&euro;@Model.FinalPrice</b>
+                    </div>
+
+                    <input type="hidden" value="@Model.Id" name="ReservationId" />
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Confirm booking" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+
+                
+            }
+            break;
+    }
+
+</div>
+<div class="float-left col-md-6">
+    <div class="card" style="width: 25rem;">
+        <img class="card-img-top p-3" src="@Model.Room.Image" alt="@Model.Room.Name" />
+        <div class="card-body text-center">
+            <h4 class="card-header">&euro;@Model.Room.Price</h4>
+            <p class="card-text">@Model.Room.Name</p>
+            <p class="card-text">Size: @Model.Room.Size</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
