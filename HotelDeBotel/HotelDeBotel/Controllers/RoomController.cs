@@ -49,7 +49,6 @@ namespace HotelDeBotel.Controllers
                     return View(newRoomVM);
                 }
                 var a = _roomRepository.Create(newRoomVM);
-
                 return RedirectToAction("Index", "Home");
             }
             catch
@@ -72,10 +71,11 @@ namespace HotelDeBotel.Controllers
             try
             {
                 _roomRepository.Update(room);
-                return RedirectToAction("Edit");
+                return RedirectToAction("Index", "Room");
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
                 return View();
             }
         }
