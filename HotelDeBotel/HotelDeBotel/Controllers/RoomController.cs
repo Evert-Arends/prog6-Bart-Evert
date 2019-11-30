@@ -48,7 +48,7 @@ namespace HotelDeBotel.Controllers
                 {
                     return View(newRoomVM);
                 }
-                _roomRepository.Create(newRoomVM);
+                var a = _roomRepository.Create(newRoomVM);
 
                 return RedirectToAction("Index", "Home");
             }
