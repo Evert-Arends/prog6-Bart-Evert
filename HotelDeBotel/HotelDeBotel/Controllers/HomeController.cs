@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 using System.Linq;
 using HotelDeBotel.Models;
+using HotelDeBotel.Models.Viewmodels;
+using System.Collections.ObjectModel;
 
 namespace HotelDeBotel.Controllers
 {
@@ -14,6 +16,7 @@ namespace HotelDeBotel.Controllers
         }
         public ActionResult Index()
         {
+
             return View(_roomRepository.GetAll());
         }
 

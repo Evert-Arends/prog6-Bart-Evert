@@ -47,7 +47,7 @@ namespace HotelDeBotel.Controllers
         [HttpPost]
         public ActionResult StepOne()
         {
-            var reservation = _reservationRepository.GetById(int.Parse(Request.Form.Get("ReservationId")));
+            ReservationVM reservation = _reservationRepository.GetById(int.Parse(Request.Form.Get("ReservationId")));
             reservation.AmountOfGuests = int.Parse(Request.Form.Get("AmountOfGuests"));
             reservation.Date = DateTime.Parse(Request.Form.Get("Date"));
 
