@@ -61,10 +61,10 @@ namespace HotelDeBotel.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IRoomRepository>().To<DummyRoomRepository>().InRequestScope();
-            kernel.Bind<IReservationRepository>().To<DummyReservationRepository>().InRequestScope();
-            kernel.Bind<IGuestRepository>().To<DummyGuestRepository>().InRequestScope();
-            kernel.Bind<IDiscountRepository>().To<DummyDiscountRepository>().InRequestScope();
-        }        
+            kernel.Bind<IRoomRepository>().To<RoomRepository>().InSingletonScope();
+            kernel.Bind<IReservationRepository>().To<ReservationRepository>().InSingletonScope();
+            kernel.Bind<IGuestRepository>().To<GuestRepository>().InSingletonScope();
+            kernel.Bind<IDiscountRepository>().To<DiscountRepository>().InSingletonScope();
+        }
     }
 }
