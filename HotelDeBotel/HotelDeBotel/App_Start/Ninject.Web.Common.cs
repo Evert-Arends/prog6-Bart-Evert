@@ -5,6 +5,7 @@ namespace HotelDeBotel.App_Start
 {
     using System;
     using System.Web;
+    using HotelDeBotel.Models;
     using HotelDeBotel.Models.Repositories;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 

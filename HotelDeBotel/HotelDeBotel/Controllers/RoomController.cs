@@ -71,10 +71,11 @@ namespace HotelDeBotel.Controllers
             try
             {
                 _roomRepository.Update(room);
-                return RedirectToAction("Edit");
+                return RedirectToAction("Index", "Room");
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e);
                 return View();
             }
         }
