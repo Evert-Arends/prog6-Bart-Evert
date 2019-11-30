@@ -62,5 +62,45 @@ namespace HotelDeBotel.Tests.Controllers
             Assert.AreEqual(createdRoom.Price, newRoom.Price);
             Assert.AreEqual(createdRoom.Size, newRoom.Size);
         }
+
+
+        [TestMethod]
+        public void GetEdit()
+        {
+            RoomController roomController = new RoomController(new DummyRoomRepository());
+            ActionResult result = roomController.Edit(1);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void PostEdit()
+        {
+            var repo = new DummyRoomRepository();
+            RoomController roomController = new RoomController(repo);
+            RoomVM newRoom = new RoomVM
+            {
+                Name = "Test room 1",
+                Price = 1337,
+                Size = 4,
+                IsDeleted = false,
+                Id = 12
+            };
+
+            ActionResult result = roomController.Create(newRoom);
+            Assert.IsNotNull(result);
+
+            RoomVM createdRoom = repo.GetById(12);
+
+            createdRoom.Name = "Test room 2 (Editted)";
+            createdRoom.Price = 404;
+            _ = roomController.Edit(createdRoom);
+
+            RoomVM edditedRoomVM = repo.GetById(12);
+            Assert.AreEqual("Test room 2 (Editted)", edditedRoomVM.Name);
+            Assert.AreEqual(404, edditedRoomVM.Price);
+
+        }
+
     }
 }
