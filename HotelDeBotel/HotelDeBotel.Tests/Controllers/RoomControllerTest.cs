@@ -102,5 +102,28 @@ namespace HotelDeBotel.Tests.Controllers
 
         }
 
+        [TestMethod]
+        public void GetDelete()
+        {
+            var repo = new DummyRoomRepository();
+            RoomController roomController = new RoomController(repo);
+            ActionResult result = roomController.Delete(1);
+
+            Assert.IsNotNull(result);
+
+        }
+        [TestMethod]
+        public void PostDelete()
+        {
+            var repo = new DummyRoomRepository();
+            RoomController roomController = new RoomController(repo);
+            ActionResult result = roomController.Delete(1, new FormCollection());
+
+            Assert.IsNotNull(result);
+
+            RoomVM createdRoom = repo.GetById(1);
+            Assert.AreEqual(createdRoom, null);
+
+        }
     }
 }
