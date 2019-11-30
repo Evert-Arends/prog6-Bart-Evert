@@ -76,6 +76,6 @@ namespace HotelDeBotel.App_Start
             kernel.Bind<IReservationRepository>().To<ReservationRepository>().InSingletonScope();
             kernel.Bind<IGuestRepository>().To<GuestRepository>().InSingletonScope();
             kernel.Bind<IDiscountRepository>().To<DiscountRepository>().InSingletonScope();
-        }        
+        }
     }
 }
