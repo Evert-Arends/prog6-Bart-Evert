@@ -8,6 +8,7 @@ namespace HotelDeBotel.Models.Repositories
     public class ReservationRepository : IReservationRepository
     {
         private BotelContext context;
+        private ReservationVM tempReservation;
 
         public ReservationRepository(BotelContext c)
         {
@@ -16,8 +17,9 @@ namespace HotelDeBotel.Models.Repositories
 
         public ReservationVM Create(ReservationVM item)
         {
-            var newItem = context.Reservations.Add(item.ToModel());
-            context.SaveChanges();
+            //var newItem = context.Reservations.Add(item.ToModel());
+            //context.SaveChanges();
+            tempReservation = item;
             return item;
         }
 
@@ -54,10 +56,16 @@ namespace HotelDeBotel.Models.Repositories
             return new ReservationVM(context.Reservations.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id));
         }
 
+        public ReservationVM GetTemp()
+        {
+            return tempReservation;
+        }
+
         public bool Save()
         {
             try
             {
+                context.Reservations.Add(tempReservation.ToModel());
                 context.SaveChanges();
                 return true;
             }

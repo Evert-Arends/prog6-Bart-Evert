@@ -8,7 +8,7 @@ namespace HotelDeBotel.Models.Repositories
     public class DummyReservationRepository : IReservationRepository
     {
         public ObservableCollection<ReservationVM> Reservations;
-        private ObservableCollection<ReservationVM> tempReservations;
+        private ReservationVM tempReservation;
 
         public DummyReservationRepository()
         {
@@ -71,14 +71,13 @@ namespace HotelDeBotel.Models.Repositories
                     }
                 }
             };
-            tempReservations = new ObservableCollection<ReservationVM>();
         }
 
         public ReservationVM Create(ReservationVM item)
         {
             int lastId = Reservations.Last().Id;
             item.Id = lastId + 1;
-            tempReservations.Add(item);
+            tempReservation = item;
             return item;
         }
 
@@ -103,11 +102,12 @@ namespace HotelDeBotel.Models.Repositories
 
         public ReservationVM GetById(int id)
         {
-            var res = Reservations.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id);
-            if (res != null)
-                return res;
-            else
-                return tempReservations.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id);
+            return Reservations.ToList().Where(r => r.IsDeleted == false).FirstOrDefault(r => r.Id == id);
+        }
+
+        public ReservationVM GetTemp()
+        {
+            return tempReservation;
         }
 
         public ObservableCollection<ReservationVM> GetAllByRoomId(int roomId)
@@ -121,10 +121,7 @@ namespace HotelDeBotel.Models.Repositories
 
         public bool Save()
         {
-            foreach(ReservationVM res in tempReservations)
-            {
-                Reservations.Add(res);
-            }
+            Reservations.Add(tempReservation);
             return true;
         }
 

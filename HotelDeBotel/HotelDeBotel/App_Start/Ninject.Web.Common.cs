@@ -5,6 +5,7 @@ namespace HotelDeBotel.App_Start
 {
     using System;
     using System.Web;
+    using HotelDeBotel.Models;
     using HotelDeBotel.Models.Repositories;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
@@ -61,6 +62,7 @@ namespace HotelDeBotel.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<BotelContext>().ToSelf().InSingletonScope();
             kernel.Bind<IRoomRepository>().To<RoomRepository>().InSingletonScope();
             kernel.Bind<IReservationRepository>().To<ReservationRepository>().InSingletonScope();
             kernel.Bind<IGuestRepository>().To<GuestRepository>().InSingletonScope();

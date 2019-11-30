@@ -47,7 +47,7 @@ namespace HotelDeBotel.Controllers
         [HttpPost]
         public ActionResult StepOne()
         {
-            var reservation = _reservationRepository.GetById(int.Parse(Request.Form.Get("ReservationId")));
+            var reservation = _reservationRepository.GetTemp();
             reservation.AmountOfGuests = int.Parse(Request.Form.Get("AmountOfGuests"));
             reservation.Date = DateTime.Parse(Request.Form.Get("Date"));
 
@@ -55,7 +55,7 @@ namespace HotelDeBotel.Controllers
             for (int x = 0; x < listOfReservations.Count; x++)
             {
                 var res = listOfReservations[x];
-                if (res.Date == reservation.Date && res != reservation)
+                if (res.Date == reservation.Date && res.Id != reservation.Id)
                 {
                     reservation.Step = 1;
                     ViewBag.ErrorMsgDate = "This room already has a booking on this date, please choose another";
@@ -83,7 +83,7 @@ namespace HotelDeBotel.Controllers
         [HttpPost]
         public ActionResult StepTwo()
         {
-            var reservation = _reservationRepository.GetById(int.Parse(Request.Form.Get("ReservationId")));
+            var reservation = _reservationRepository.GetTemp();
             for (int i = 0; i < reservation.Guests.Count; i++)
             {
                 var guest = reservation.Guests[i];
@@ -102,7 +102,7 @@ namespace HotelDeBotel.Controllers
         [HttpPost]
         public ActionResult StepThree()
         {
-            var reservation = _reservationRepository.GetById(int.Parse(Request.Form.Get("ReservationId")));
+            var reservation = _reservationRepository.GetTemp();
             reservation.Step = 4;
             return View("Create", reservation);
         }

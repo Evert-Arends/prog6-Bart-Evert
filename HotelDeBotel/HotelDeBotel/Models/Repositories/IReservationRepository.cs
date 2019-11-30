@@ -11,6 +11,7 @@ namespace HotelDeBotel.Models.Repositories
     public interface IReservationRepository
     {
         ReservationVM GetById(int id);
+        ReservationVM GetTemp();
         ObservableCollection<ReservationVM> GetAll();
         ObservableCollection<ReservationVM> GetAllByRoomId(int roomId);
         ReservationVM Create(ReservationVM item);
